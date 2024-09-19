@@ -27,6 +27,10 @@ const Reserva = sequelize.define("Reserva", {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  fecha_uso: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+  },
 }, {
   timestamps: false,
   tableName: 'usuarios_productos'

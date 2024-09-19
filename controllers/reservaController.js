@@ -4,6 +4,7 @@ const Imagen = require("../models/imagen");
 const Reserva = require("../models/usuario_producto");
 const { Op } = require("sequelize");
 const { enviarCorreoReserva } = require('./notificationController');
+const { now } = require("sequelize/lib/utils");
 
 // Obtener detalle temporal de reserva (producto, usuario y fecha seleccionada)
 exports.obtenerDetalleReserva = async (req, res) => {
@@ -34,7 +35,8 @@ exports.confirmarReserva = async (req, res) => {
         const nuevaReserva = await Reserva.create({
             producto_id: productoId,
             usuario_id: usuarioId,
-            fecha_reserva: fecha
+            fecha_uso: fecha,
+            fecha_reserva: new Date()
         });
 
         // Obtener el producto y el usuario para los detalles del correo
