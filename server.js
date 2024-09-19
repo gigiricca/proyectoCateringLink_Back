@@ -9,13 +9,14 @@ app.use(cors());
 
 app.use("/api", routes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
+const HOST = '0.0.0.0';  // Permitir acceso desde cualquier red
 
 // Sincronizar modelos y luego iniciar el servidor
 sequelize.
   sync({ alter: true })
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, HOST, () => {
       console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
   })
