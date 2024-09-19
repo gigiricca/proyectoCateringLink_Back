@@ -30,7 +30,7 @@ exports.obtenerDetalleReserva = async (req, res) => {
 
 exports.confirmarReserva = async (req, res) => {
     try {
-        const { productoId, usuarioId, fecha } = req.params;
+        const { productoId, usuarioId, fecha } = req.body;
         // Crear la reserva en la base de datos
         const nuevaReserva = await Reserva.create({
             producto_id: productoId,
