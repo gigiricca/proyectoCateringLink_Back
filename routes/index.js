@@ -51,5 +51,6 @@ router.post('/detalle', reservaController.obtenerDetalleReserva);
 router.post('/confirmar', reservaController.confirmarReserva);
 router.post('/fechasDisponibles', reservaController.obtenerFechasDisponibles);
 router.get('/historial/:usuarioId', reservaController.obtenerHistorialReservas);
+router.get('/fechasReservadas/:productoId', reservaController.obtenerFechasReservadas);
 
 module.exports = router;

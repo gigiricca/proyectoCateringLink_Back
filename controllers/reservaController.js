@@ -139,4 +139,30 @@ exports.obtenerHistorialReservas = async (req, res) => {
     }
 };
 
+exports.obtenerFechasReservadas = async (req, res) => {
+    try {
+        const { productoId } = req.body;
+
+        // Validar que se envió el productoId
+        if (!productoId) {
+            return res.status(400).json({ mensaje: 'Producto ID es requerido' });
+        }
+
+        // Obtener todas las reservas del producto seleccionado
+        const reservas = await Reserva.findAll({
+            where: {
+                producto_id: productoId
+            },
+            attributes: ['fecha_reserva'] // Seleccionamos solo la columna de fecha_reserva
+        });
+
+        // Extraer solo las fechas de uso y retornarlas
+        const fechasReservadas = reservas.map(reserva => reserva.fecha_reserva);
+
+        res.json({ fechasReservadas });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener las fechas reservadas', error });
+    }
+};
+
 
