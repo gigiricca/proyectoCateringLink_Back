@@ -153,11 +153,11 @@ exports.obtenerFechasReservadas = async (req, res) => {
             where: {
                 producto_id: productoId
             },
-            attributes: ['fecha_reserva'] // Seleccionamos solo la columna de fecha_reserva
+            attributes: ['fecha_uso'] // Seleccionamos solo la columna de fecha_reserva
         });
 
         // Extraer solo las fechas de uso y retornarlas
-        const fechasReservadas = reservas.map(reserva => reserva.fecha_reserva);
+        const fechasReservadas = reservas.map(reserva => reserva.fecha_uso);
 
         res.json({ fechasReservadas });
     } catch (error) {
