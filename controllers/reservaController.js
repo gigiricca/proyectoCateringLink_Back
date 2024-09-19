@@ -63,18 +63,21 @@ exports.obtenerFechasDisponibles = async (req, res) => {
     try {
         const { producto_id, fechaInicio, fechaFin } = req.body;
 
-        // Obtener todas las reservas para el producto en el rango de fechas dado
+        // Obtener todas las reservas para el producto en el rango de fechas dado filtrando por fecha_uso
         const reservas = await Reserva.findAll({
             where: {
                 producto_id,
-                fecha_reserva: {
-                    [Op.between]: [fechaInicio, fechaFin]  // Asegúrate de importar Op de Sequelize
+                fecha_uso: {
+                    [Op.between]: [fechaInicio, fechaFin]  // Filtrar por fecha_uso
                 }
             }
         });
 
-        // Extraer todas las fechas reservadas
-        const fechasReservadas = reservas.map(reserva => reserva.fecha_reserva.toISOString().split('T')[0]);
+        // Extraer todas las fechas de uso reservadas
+        const fechasReservadas = reservas.map(reserva => {
+            const fechaUso = new Date(reserva.fecha_uso); // Asegurarse de que sea un objeto Date
+            return fechaUso.toISOString().split('T')[0];
+        });
 
         // Crear una lista de todas las fechas en el rango dado
         const fechasDisponibles = [];
@@ -92,9 +95,11 @@ exports.obtenerFechasDisponibles = async (req, res) => {
         // Retornar las fechas disponibles y no disponibles
         res.json({ fechasDisponibles, fechasNoDisponibles: fechasReservadas });
     } catch (error) {
-        res.status(500).json({ mensaje: 'Error al obtener las fechas disponibles y no disponibles', error });
+        res.status(500).json({ mensaje: 'Error al obtener las fechas disponibles y no disponibles: ' + error.message });
     }
 };
+
+
 
 // Obtener historial de reservas del usuario autenticado
 exports.obtenerHistorialReservas = async (req, res) => {
