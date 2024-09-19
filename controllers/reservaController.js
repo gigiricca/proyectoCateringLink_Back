@@ -141,7 +141,7 @@ exports.obtenerHistorialReservas = async (req, res) => {
 
 exports.obtenerFechasReservadas = async (req, res) => {
     try {
-        const { productoId } = req.body;
+        const { productoId } = req.params;
 
         // Validar que se envió el productoId
         if (!productoId) {
