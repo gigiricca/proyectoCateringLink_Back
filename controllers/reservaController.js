@@ -1,5 +1,6 @@
 const Producto = require("../models/producto"); 
 const Usuario = require("../models/usuario");
+const Imagen = require("../models/imagen");
 const Reserva = require("../models/usuario_producto");
 const { Op } = require("sequelize");
 const { enviarCorreoReserva } = require('./notificationController');
@@ -110,8 +111,15 @@ exports.obtenerHistorialReservas = async (req, res) => {
             },
             include: [
                 {
-                    model: Producto, // Incluir el producto para obtener sus detalles
-                    attributes: ['nombre', 'descripcion'] // Incluir campos relevantes del producto
+                    model: Producto, 
+                    attributes: ['nombre', 'descripcion', 'precio'],
+                    include: [
+                        {
+                            model: Imagen,
+                            as: 'imagenes', 
+                            attributes: ['url'] 
+                        }
+                    ]
                 }
             ],
             order: [['fecha_reserva', 'DESC']] // Ordenar por fecha de reserva (más recientes primero)
@@ -123,4 +131,5 @@ exports.obtenerHistorialReservas = async (req, res) => {
         res.status(500).json({ mensaje: 'Error al obtener el historial de reservas', error });
     }
 };
+
 
