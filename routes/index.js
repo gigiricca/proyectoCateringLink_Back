@@ -27,6 +27,7 @@ router.post('/register', usuarioController.crearUsuario);
 router.post('/login', usuarioController.login);
 router.get('/usuarios', usuarioController.obtenerUsuarios); 
 router.put('/usuarios/cambiar-rol', usuarioController.cambiarRol);
+router.put("/usuarios/:id", usuarioController.updateUsuario);
 
 // Rutas para características
 // Obtener todas las características

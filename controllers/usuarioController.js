@@ -139,3 +139,39 @@ exports.obtenerFavoritos = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los favoritos" + error });
   }
 };
+
+// Controlador para actualizar un usuario existente
+exports.updateUsuario = async (req, res) => {
+  const { id } = req.params; // Obtener el ID del usuario de los parámetros de la solicitud
+  const { nombre, apellido, email, password, rolId } = req.body; // Obtener los datos del cuerpo de la solicitud
+
+  try {
+    // Verificar si el usuario existe
+    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Actualizar la contraseña si se proporciona una nueva
+    let hashedPassword = usuario.password; // Usar la contraseña existente por defecto
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10); // Encriptar la nueva contraseña
+    }
+
+    // Actualizar los datos del usuario
+    await usuario.update(
+      {
+        nombre,
+        apellido,
+        email,
+        password: hashedPassword, // Usar la contraseña actualizada
+        rolId,
+      },
+      { fields: ["nombre", "apellido", "email", "password", "rolId"] } // Campos permitidos para actualizar
+    );
+
+    res.json({ message: "Usuario actualizado exitosamente", usuario });
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el usuario", error });
+  }
+};
